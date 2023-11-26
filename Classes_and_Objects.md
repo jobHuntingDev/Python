@@ -50,7 +50,7 @@ class Worker(Person):
 
 A way to define what happens when arithmetic is performed with objects.In this example we'll be creating vector objects and defining vector arithmetic.
 
-```pyhton
+```python
 class Vector:
 
     def __init__(self,x,y):
