@@ -1,6 +1,4 @@
-# Python
-
-## OOP in python
+# OOP in python
 
 ### Basic class definition
 
@@ -81,7 +79,7 @@ x: 3 y: 5
 x: 5 y: 3
 x: 8 y: 8
 ```
-## Queues
+# Queues
 
 Where we'd use a que: one list is  being operated on by multiple threads so to prevent values being used more than one we use a que
 
@@ -225,4 +223,153 @@ def factorial(n):
 
 print(factorial(7))
 ```
-Notes on the python programing language by L.G Mngadi
+# XML Processing
+
+## The XML file
+
+```xml
+<group>
+	<person id="1">
+		<name>Mike Smith</name>
+		<age>34</age>
+		<weight>90</weight>
+		<height>175</height>
+	</person>
+	<person id="2">
+		<name>Anna Smith</name>
+		<age>54</age>
+		<weight>91</weight>
+		<height>188</height>
+	</person>
+	<person id="3">
+		<name>Bob Johnson</name>
+		<age>25</age>
+		<weight>76</weight>
+		<height>190</height>
+	</person>
+</group>
+```
+
+## SAX
+
+Useful for large xml files or little RAM memory.
+
+```python
+import xml.sax
+
+class GroupHandler(xml.sax.ContentHandler):
+	
+	def startElement(self, name, attrs):
+		self.current = name 
+		if self.current == "person":
+			print("---Person---")
+			print("ID: {}".format(attrs["id"]))
+
+	def character(self, content):
+		if self.current == "name":
+			self.name = content
+		elif self.current == "age":
+			self.age = content
+		elif self.current == "weight":
+			self.weight = content
+		elif self.current == "height":
+			self.height = content
+		else:
+			print("no match")
+
+	def endElement(self, name)
+		if self.current == "name":
+			print("Name: {}".format(self.name))
+		elif self.current == "age":
+			print("Age: {}".format(self.age))
+		elif self.current == "weight":
+			print("Weight: {}".format(self.weight))
+		elif self.current == "height":
+			print("height: {}".format(self.height))
+		else:
+			print("no match")
+			
+		self.current = ""
+
+handler = GroupHandler()
+parser = xml.sax.make_parser()
+parser.setContentHandler(handler)
+parser.parse("data.xml")
+```
+
+## DOM
+
+Read from files
+
+```python
+import xml.dom.minidom
+
+domtree = xml.dom.minidom.parse("data.xml")
+
+# refering to <group> in .xml file
+group = domtree.documentElement
+
+persons = group.getElementByTagname("person")
+
+for person in persons:
+	print("---Person---")
+	if person.hasAttribute("id"):
+		print("ID: {}".format(person.getAttribute("id")))
+	
+	print("Name: {}".format(person.getElementsByTagName("name")[0].childNodes[0].data))
+	print("Age: {}".format(person.getElementsByTagName("age")[0].childNodes[0].data))
+	print("Weight: {}".format(person.getElementsByTagName("weight")[0].childNodes[0].data))
+	print("height: {}".format(person.getElementsByTagName("height")[0].childNodes[0].data))
+```
+
+Edit xml file
+
+```python
+import xml.dom.minidom
+
+domtree = xml.dom.minidom.parse("data.xml")
+
+# refering to <group> in .xml file
+group = domtree.documentElement
+
+persons = group.getElementByTagname("person")
+
+persons[2].getElementsByTagName("name")[0].childNodes[0].nodeValue = "Changed name"
+persons[0].setAttribute("id", "100")
+persons[3].getElementsByTagname("age")[0].childNodes[0].nodeValue = "-10"
+
+# Save changes to file
+domtree.writexml(open("data.xml", "w"))
+```
+
+Create and add new elements
+
+```python
+import xml.dom.minidom
+
+domtree = xml.dom.minidom.parse("data.xml")
+
+newperson = domtree.createElement("person")
+newperson.setAttribute("id", "4")
+
+name = domtree.createElement("name")
+name.appendChild(domtree.createTextNode("Paul Green"))
+
+age = domtree.createElement("age")
+age.appendChild(domtree.createTextNode("19"))
+
+weight = domtree.createElement("weight")
+weight.appendChild(domtree.createTextNode("80"))
+
+height = domtree.createElement("height")
+height.appendChild(domtree.createTextNode("176 cm"))
+
+newperson.appendChild(name)
+newperson.appendChild(weight)
+newperson.appendChild(age)
+newperson.appendChild(height)
+
+group.appendChild(newperson)
+
+domtree.writexml(open("data.xml", 'w'))
+```
