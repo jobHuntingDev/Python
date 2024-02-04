@@ -373,3 +373,57 @@ group.appendChild(newperson)
 
 domtree.writexml(open("data.xml", 'w'))
 ```
+# Logging
+
+```python
+import logging
+
+# Change security level to DEBUG
+logging.basicConfig(level=logging.DEBUG)
+
+# Change security leve to CRITICAL
+logging.basicConfig(level=logging.CRITICAL)
+
+# Change security level to INFO
+logging.basicConfig(level=loggin.INFO)
+
+logging.info("You have got 20 mails in your inbox!")
+logging.warning("You're running low on space: 28.8 GB of 29.2 in use")
+logging.critical("All components failed!")
+```
+
+Creating custom logger
+
+```python
+import logging
+
+# Create
+logger = logging.getLogger("Youtube Channel Logger")
+
+# Create error message
+logger.info("The logger was just created")
+logger.critical("Your YouTube channel was deleted"
+logger.log(logging.ERROR, "An error occured")
+```
+
+Saving log message to a file
+
+```python
+import logging
+
+# Create
+logger = logging.getLogger("Youtube Channel Logger")
+logger.setLevel(logging.DEBUG)
+
+handler = logging.FileHandler("mylog.log")
+handler = setLevel(logging.INFO)
+
+# Create Format
+formatter = logging.Formatter("%(levelname)s - %(asctime)s: %(message)s")
+handler.setFormatter(formatter)
+
+logger.addHandler(handler)
+
+logger.debug("This is a debug message!")
+logger.info("This is important information!")
+```
